@@ -10,7 +10,6 @@ async function main(){
   const conn = mongoose.connect(mongoDB);
 }
 
-
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
@@ -32,13 +31,13 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const indexRoutes = require('./routes/index');
-// const appRoutes = require('./routes/appRoutes');
+const appRoutes = require('./routes/appRoutes');
 const { Server } = require("http");
 
 
 //Using the Routes 
 app.use('/index', indexRoutes);
-// app.use('/api', appRoutes);
+app.use('/api', appRoutes);
 
 //starting the server 
 const PORT = process.env.PORT || 3000;
