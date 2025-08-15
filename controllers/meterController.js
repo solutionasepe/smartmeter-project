@@ -16,7 +16,7 @@ exports.createMeterPower = asyncHandler(async function(req, res, next){
             power2,
             power3,
             timestamp,
-            createdAt
+            createdAt: new Date()
         });
 
         const savedMeter = await meter.save();
