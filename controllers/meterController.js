@@ -6,7 +6,7 @@ const asyncHandler = require("express-async-handler");
 exports.createMeterPower = asyncHandler(async function(req, res, next){
     try{
         const {power1, power2, power3, timestamp, createdAt} = req.body;
-        if(!power1 || !power2 || !power3){
+        if(power1 == null || power2 == null || power3 == null ){
             res.status(400).json({error: "power1 or power 2 or power 3 are required"});
             return;
         }
@@ -91,15 +91,27 @@ exports.relayControlUpdate = asyncHandler(async function(req, res, next){
         }
 
         const savedUpdate = await controlupdate.save();
-        res.status(201).json(savedupdate);
+        res.status(201).json(savedUpdate);
     } catch (error) {
         next(error);
     }
 });
 
+exports.relaydelete = asyncHandler(async function(req, res, next) {
+    try {
+        const relay_delete = await Relay.findByIdAndDelete(req.params.id);
+        if(!relay_delete){
+            res.status(404).json({error:"this object is not available"});
+        }
+        res.status(201).json({message:"this object has been deleted"})
+    } catch (error) {
+        
+    }
+})
+
 exports.relayList = asyncHandler(async function(req, res, next){
     try {
-        const allrelayOptions = await Relay.find().select('-_id').exec
+        const allrelayOptions = await Relay.find().exec();
         res.json(allrelayOptions);
     } catch (error) {
         next(error);

@@ -15,4 +15,6 @@ router.get('/RelayOptions', meterController.relayList);
 
 router.put('/RelayControl/:id/update', meterController.relayControlUpdate);
 
+router.delete('/Relaydelete/:id', meterController.relaydelete);
+
 module.exports = router
