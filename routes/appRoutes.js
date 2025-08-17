@@ -98,10 +98,13 @@ router.put('/Meter/:id/update', meterController.Meter_update);
  *           schema:
  *             type: object
  *             properties:
- *               relayName:
- *                 type: string
- *               status:
- *                 type: boolean
+ *               relay1:
+ *                 type: number
+ *               relay2:
+ *                 type: number
+ *               relay3:
+ *                 type: number
+ *               
  *     responses:
  *       201:
  *         description: Relay control created successfully
@@ -144,10 +147,12 @@ router.get('/RelayOptions', meterController.relayList);
  *           schema:
  *             type: object
  *             properties:
- *               relayName:
- *                 type: string
- *               status:
- *                 type: boolean
+ *               relay1:
+ *                 type: number
+ *               relay2:
+ *                 type: number
+ *               relay3:
+ *                 type: number
  *     responses:
  *       200:
  *         description: Relay control updated successfully
@@ -194,10 +199,23 @@ router.delete('/Relaydelete/:id', meterController.relaydelete);
  *           schema:
  *             type: object
  *             properties:
- *               metricName:
+ *               device_id:
  *                 type: string
- *               value:
+ *               voltage:
  *                 type: number
+ *               current:
+ *                 type: number
+ *               power:
+ *                 type: number
+ *               total_unit:
+ *                 type: number
+ *               unit_low:
+ *                 type: number
+ *               relay_state:
+ *                 type: number
+ *               created_at:
+ *                 type: string
+ *                 format: date-time
  *     responses:
  *       201:
  *         description: Metric created successfully
