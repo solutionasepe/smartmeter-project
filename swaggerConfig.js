@@ -10,7 +10,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: "http://localhost:3000", // Replace with your server URL
+                url: "https://smartmeter-project.onrender.com/", // Replace with your server URL
             },
         ],
     },
