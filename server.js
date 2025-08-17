@@ -10,6 +10,8 @@ async function main(){
   const conn = mongoose.connect(mongoDB);
 }
 
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocs = require("./swaggerConfig");
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
@@ -38,10 +40,14 @@ const { Server } = require("http");
 //Using the Routes 
 app.use('/index', indexRoutes);
 app.use('/api', appRoutes);
+// Swagger documentation route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 //starting the server 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, ()=> console.log(`server runnning on ${PORT}`));
+app.listen(PORT, ()=>{console.log(`server runnning on ${PORT}`);
+                      console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
+} );
 
 app.use(function(err, req, res, next) {
     // set locals, only providing error in development
