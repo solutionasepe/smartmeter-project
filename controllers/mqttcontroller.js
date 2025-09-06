@@ -10,12 +10,12 @@ exports.getPowerData = (req, res) => {
 exports.setRelayState = (req, res) => {
   const { relay1, relay2, relay3 } = req.body;
 
-  publishRelayCommand(relay1, relay2, relay3);
+  newcommand = publishRelayCommand(relay1, relay2, relay3);
 
   res.status(201).json({
     status: "success",
     message: "Relay command published",
-    command: { relay1, relay2, relay3 },
+    command: newcommand,
   });
 };
 

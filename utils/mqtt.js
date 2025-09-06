@@ -93,7 +93,7 @@ const powerTopic = "smartmeter/power";
 const relayTopic = "smartmeter/relay";  
 
 let lastPowerData = {}; 
-let currentRelayState = { relay1: 0, relay2: 0, relay3: 0 };
+let currentRelayState = {};
 
 const options = {
   clientId: "node_backend_01",
@@ -113,8 +113,14 @@ client.on("connect", () => {
 
   // periodically refresh relay state to ESP
   setInterval(() => {
-    client.publish(relayTopic, JSON.stringify(currentRelayState));
-  }, 5000);
+  // re-publish whatever the current relay state is
+  publishRelayCommand(
+    currentRelayState.relay1,
+    currentRelayState.relay2,
+    currentRelayState.relay3
+  );
+}, 5000);
+
 });
 
 // Listen to messages
@@ -132,7 +138,8 @@ client.on("message", async (topic, message) => {
       console.error("Error parsing power data:", err);
     }
   }
-
+  
+//   let currentRelayState = {};
   if (topic === relayTopic) {
     try {
       const relayUpdate = JSON.parse(message.toString());
@@ -148,8 +155,8 @@ client.on("message", async (topic, message) => {
 
 // Publish relay commands
 function publishRelayCommand(relay1, relay2, relay3) {
-  currentRelayState = {command: {relay1, relay2, relay3} };
-
+  currentRelayState = {relay1, relay2, relay3};
+  
   const command = JSON.stringify(currentRelayState);
   client.publish(relayTopic, command, { qos: 1 }, (err) => {
     if (err) {
@@ -158,6 +165,8 @@ function publishRelayCommand(relay1, relay2, relay3) {
       console.log("🔌 Relay Command Sent:", command);
     }
   });
+
+  return currentRelayState;
 }
 
 module.exports = {
