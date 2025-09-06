@@ -87,13 +87,14 @@
 
 const mqtt = require("mqtt");
 const powerData = require("../models/metermodel");
+const RelayState = require("../models/relayControl")
 
 const brokerUrl = "mqtts://1b0f688a41554518a4458f213018964a.s1.eu.hivemq.cloud:8883";
 const powerTopic = "smartmeter/power";  
 const relayTopic = "smartmeter/relay";  
 
 let lastPowerData = {}; 
-let currentRelayState = {};
+// let currentRelayState = {};
 
 const options = {
   clientId: "node_backend_01",
@@ -112,14 +113,14 @@ client.on("connect", () => {
   client.subscribe(relayTopic, () => console.log(`Subscribed to: ${relayTopic}`));
 
   // periodically refresh relay state to ESP
-  setInterval(() => {
-  // re-publish whatever the current relay state is
-  publishRelayCommand(
-    currentRelayState.relay1,
-    currentRelayState.relay2,
-    currentRelayState.relay3
-  );
-}, 5000);
+//   setInterval(() => {
+//   // re-publish whatever the current relay state is
+//   publishRelayCommand(
+//     currentRelayState.relay1,
+//     currentRelayState.relay2,
+//     currentRelayState.relay3
+//   );
+// }, 5000);
 
 });
 
@@ -154,7 +155,7 @@ client.on("message", async (topic, message) => {
 });
 
 // Publish relay commands
-function publishRelayCommand(relay1, relay2, relay3) {
+async function publishRelayCommand(relay1, relay2, relay3) {
   currentRelayState = {relay1, relay2, relay3};
   
   const command = JSON.stringify(currentRelayState);
@@ -166,11 +167,19 @@ function publishRelayCommand(relay1, relay2, relay3) {
     }
   });
 
+    try {
+    const entry = new RelayState(currentRelayState);
+    await entry.save();
+    console.log("💾 Relay state saved to DB:", currentRelayState);
+  } catch (dbErr) {
+    console.error("Error saving relay state:", dbErr);
+  }
+
   return currentRelayState;
 }
 
 module.exports = {
   publishRelayCommand,
   getLastPowerData: () => lastPowerData,
-  getRelaystate: () => currentRelayState,
+//   getRelaystate: () => currentRelayState,
 };
