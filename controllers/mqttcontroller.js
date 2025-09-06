@@ -12,7 +12,7 @@ exports.setRelayState = (req, res) => {
 
   publishRelayCommand(relay1, relay2, relay3);
 
-  res.json({
+  res.status(201).json({
     status: "success",
     message: "Relay command published",
     command: { relay1, relay2, relay3 },
