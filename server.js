@@ -7,7 +7,10 @@ const mongoDB = process.env.DATABASE_URL;
 
 main().catch((err) => console.log(err));
 async function main(){
-  const conn = mongoose.connect(mongoDB);
+  const conn = mongoose.connect(mongoDB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }).then(()=>console.log("MongoDB server connected"));
 }
 
 const swaggerUi = require("swagger-ui-express");

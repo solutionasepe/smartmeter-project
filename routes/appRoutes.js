@@ -3,6 +3,7 @@ const router = express.Router();
 
 const meterController = require("../controllers/meterController");
 const meterController2 = require("../controllers/meterController2");
+const mqttcontroller = require("../controllers/mqttcontroller");
 
 /**
  * @swagger
@@ -223,5 +224,8 @@ router.delete('/Relaydelete/:id', meterController.relaydelete);
  *         description: Server error
  */
 router.post('/createMetric/', meterController2.createrMetric);
+router.get("/power", mqttcontroller.getPowerData);
+router.post("/relay", mqttcontroller.setRelayState);
+
 
 module.exports = router
