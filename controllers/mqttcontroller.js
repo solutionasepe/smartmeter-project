@@ -22,6 +22,6 @@ exports.setRelayState = (req, res) => {
 exports.getRelaystate = (req, res) => {
   res.json({
     status: "success",
-    relayState: getRelayState()
+    relayState: getRelaystate()
   });
 };
