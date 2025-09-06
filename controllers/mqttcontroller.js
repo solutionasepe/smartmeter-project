@@ -1,5 +1,5 @@
 // controllers/smartMeterController.js
-const { publishRelayCommand, getLastPowerData } = require("../utils/mqtt");
+const { publishRelayCommand, getLastPowerData, getRelaystate } = require("../utils/mqtt");
 
 // Get latest power readings
 exports.getPowerData = (req, res) => {
@@ -19,7 +19,7 @@ exports.setRelayState = (req, res) => {
   });
 };
 
-exports.getRelayState = (req, res) => {
+exports.getRelaystate = (req, res) => {
   res.json({
     status: "success",
     relayState: getRelayState()

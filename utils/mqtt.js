@@ -8,7 +8,7 @@ const powerTopic = "smartmeter/power";   // ESP32 publishes power data
 const relayTopic = "smartmeter/relay";   // ESP32 subscribes for relay commands
 
 let lastPowerData = {}; // Store latest power readings
-let currentRelayState = {}; // default OFF
+let currentRelayState = {relay1: 0, relay2: 0, relay3: 0}; // default OFF
 
 // Connect to HiveMQ Cloud with authentication
 const options = {
@@ -31,7 +31,8 @@ client.on("connect", () => {
   });
   // Periodically republish current relay state (keep ESP in sync)
   setInterval(() => {
-    client.publish(relayTopic, JSON.stringify(currentRelayState));
+    const refreshPayload = JSON.stringify({ command: currentRelayState });
+    client.publish(relayTopic, refreshPayload, { qos: 1 });
     console.log("🔄 Relay state refreshed:", currentRelayState);
   }, 5000); // every 5s
 
@@ -57,10 +58,23 @@ client.on("message", async (topic, message) => {
 
 // Publish relay commands
 function publishRelayCommand(relay1, relay2, relay3) {
+const payloadObj = { command: { relay1, relay2, relay3 } };
+  const command = JSON.stringify(payloadObj);
+
+  if (!client.connected) {
+    console.warn("MQTT not connected, cannot publish relay command. currentRelayState will still update locally.");
+  }
+
+  // update local memory first
   currentRelayState = { relay1, relay2, relay3 };
-  const command = JSON.stringify(currentRelayState);
-  client.publish(relayTopic, command);
-  console.log("📢 Relay Command Sent:", command);
+
+  client.publish(relayTopic, command, { qos: 1 }, (err) => {
+    if (err) {
+      console.error("Publish error:", err);
+    } else {
+      console.log("🔌 Relay Command Sent:", command);
+    }
+  });
 }
 // Export functions and data
 module.exports = {

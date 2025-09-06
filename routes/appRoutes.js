@@ -226,7 +226,7 @@ router.delete('/Relaydelete/:id', meterController.relaydelete);
 router.post('/createMetric/', meterController2.createrMetric);
 router.get("/power", mqttcontroller.getPowerData);
 router.post("/relay", mqttcontroller.setRelayState);
-router.get("/relay", mqttcontroller.getRelayState);
+router.get("/relay", mqttcontroller.getRelaystate);
 
 
 module.exports = router
