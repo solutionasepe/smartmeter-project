@@ -26,7 +26,7 @@ exports.getRelayState = async (req, res) => {
     const latest = await RelayState.findOne().sort({ timestamp: -1 }).exec();
     res.json({
       status: "success",
-      relayState: latest || { relay1: 0, relay2: 0, relay3: 0 },
+      command: latest || { relay1: 0, relay2: 0, relay3: 0 },
     });
   } catch (err) {
     res.status(500).json({ status: "error", error: err.message });
