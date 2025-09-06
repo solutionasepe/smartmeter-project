@@ -156,9 +156,16 @@ client.on("message", async (topic, message) => {
 
 // Publish relay commands
 async function publishRelayCommand(relay1, relay2, relay3) {
-  currentRelayState = {relay1, relay2, relay3};
-  
-  const command = JSON.stringify(currentRelayState);
+  // Wrap inside "command" object
+  const payloadObj = {
+    command: { relay1, relay2, relay3 }
+  };
+
+  // Update in-memory state (for getRelayState)
+  currentRelayState = { relay1, relay2, relay3 };
+
+  // Publish to MQTT
+  const command = JSON.stringify(payloadObj);
   client.publish(relayTopic, command, { qos: 1 }, (err) => {
     if (err) {
       console.error("Publish error:", err);
@@ -167,16 +174,18 @@ async function publishRelayCommand(relay1, relay2, relay3) {
     }
   });
 
-    try {
-    const entry = new RelayState(currentRelayState);
+  // Save to DB (store same shape as your schema)
+  try {
+    const entry = new RelayState(payloadObj.command);
     await entry.save();
-    console.log("💾 Relay state saved to DB:", currentRelayState);
+    console.log("💾 Relay state saved to DB:", payloadObj.command);
   } catch (dbErr) {
     console.error("Error saving relay state:", dbErr);
   }
 
-  return currentRelayState;
+  return payloadObj.command; // return clean relay object {relay1, relay2, relay3}
 }
+
 
 module.exports = {
   publishRelayCommand,
