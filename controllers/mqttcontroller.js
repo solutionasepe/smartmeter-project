@@ -18,3 +18,10 @@ exports.setRelayState = (req, res) => {
     command: { relay1, relay2, relay3 },
   });
 };
+
+exports.getRelayState = (req, res) => {
+  res.json({
+    status: "success",
+    relayState: getRelayState()
+  });
+};
