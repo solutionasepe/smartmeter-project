@@ -148,7 +148,7 @@ client.on("message", async (topic, message) => {
 
 // Publish relay commands
 function publishRelayCommand(relay1, relay2, relay3) {
-  currentRelayState = { relay1, relay2, relay3 };
+  currentRelayState = {command: {relay1, relay2, relay3} };
 
   const command = JSON.stringify(currentRelayState);
   client.publish(relayTopic, command, { qos: 1 }, (err) => {
