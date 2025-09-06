@@ -8,7 +8,7 @@ const powerTopic = "smartmeter/power";   // ESP32 publishes power data
 const relayTopic = "smartmeter/relay";   // ESP32 subscribes for relay commands
 
 let lastPowerData = {}; // Store latest power readings
-let currentRelayState = { relay1: 0, relay2: 0, relay3: 0 }; // default OFF
+let currentRelayState = {}; // default OFF
 
 // Connect to HiveMQ Cloud with authentication
 const options = {
