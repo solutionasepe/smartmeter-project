@@ -8,7 +8,7 @@ const powerTopic = "smartmeter/power";   // ESP32 publishes power data
 const relayTopic = "smartmeter/relay";   // ESP32 subscribes for relay commands
 
 let lastPowerData = {}; // Store latest power readings
-let currentRelayState = {relay1: 0, relay2: 0, relay3: 0}; // default OFF
+// let currentRelayState = {relay1: 0, relay2: 0, relay3: 0}; // default OFF
 
 // Connect to HiveMQ Cloud with authentication
 const options = {
@@ -30,11 +30,11 @@ client.on("connect", () => {
     }
   });
   // Periodically republish current relay state (keep ESP in sync)
-  setInterval(() => {
-    const refreshPayload = JSON.stringify({ command: currentRelayState });
-    client.publish(relayTopic, refreshPayload, { qos: 1 });
-    console.log("🔄 Relay state refreshed:", currentRelayState);
-  }, 5000); // every 5s
+//   setInterval(() => {
+//     const refreshPayload = JSON.stringify({ command: currentRelayState });
+//     client.publish(relayTopic, refreshPayload, { qos: 1 });
+//     console.log("🔄 Relay state refreshed:", currentRelayState);
+//   }, 5000); // every 5s
 
 });
 
