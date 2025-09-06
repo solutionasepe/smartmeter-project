@@ -3,7 +3,7 @@ const { publishRelayCommand, getLastPowerData } = require("../utils/mqtt");
 
 // Get latest power readings
 exports.getPowerData = (req, res) => {
-  res.json(getLastPowerData());
+  res.status(200).json(getLastPowerData());
 };
 
 // Send relay control command
